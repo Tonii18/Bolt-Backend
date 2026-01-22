@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.User;
+import com.example.demo.model.UserDTO;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtTokenProvider;
 
@@ -35,15 +36,20 @@ public class AuthService {
 		return tokenProvider.generateToken(authentication);
 	}
 	
-	public User register(User user) {
-		if(userRepo.findByEmail(user.getEmail()).isPresent()) {
+	public void register(UserDTO userDTO) {
+		if(userRepo.findByEmail(userDTO.getEmail()).isPresent()) {
 			throw new RuntimeException("Email is already taken!");
 		}
 		
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		User user = new User();
+		
+		user.setFullName(userDTO.getFullName());
+		user.setEmail(userDTO.getEmail());
+		user.setPhone(userDTO.getPhone());
+		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setRol("ROLE_USER");
 		
-		return userRepo.save(user);
+		userRepo.save(user);
 	}
 
 }

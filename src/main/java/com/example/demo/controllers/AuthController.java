@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.entity.User;
-import com.example.demo.services.AuthService;
+import com.example.demo.model.UserDTO;
 import com.example.demo.services.AuthService;
 
 @RestController
@@ -27,8 +26,9 @@ public class AuthController {
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<?> register(@RequestBody User user){
-		return ResponseEntity.ok(authService.register(user));
+	public ResponseEntity<?> register(@RequestBody UserDTO userDTO){
+		authService.register(userDTO);
+		return ResponseEntity.ok("User registered succesfully");
 	}
 
 }
