@@ -42,7 +42,7 @@ public class User {
 
     private String rol;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<Task>();
 
     @ManyToMany(mappedBy = "users")

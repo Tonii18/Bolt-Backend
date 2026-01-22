@@ -38,7 +38,7 @@ public class Project {
     private String description;
     private LocalDateTime creationDate;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<Task>();
 
     @ManyToMany
