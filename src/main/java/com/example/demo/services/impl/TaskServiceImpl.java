@@ -11,42 +11,31 @@ import com.example.demo.repository.TaskRepository;
 import com.example.demo.services.TasksServices;
 
 @Service("taskService")
-public class TaskServiceImpl implements TasksServices{
-	
-	private final TaskRepository taskRepo;
-	
-	TaskServiceImpl(TaskRepository taskRepo){
-		this.taskRepo = taskRepo;
-	}
-	
+public class TaskServiceImpl implements TasksServices {
+
 	@Autowired
 	@Qualifier("taskRepository")
+	TaskRepository taskRepository;
 
 	@Override
 	public List<Task> showAllTasks() {
-		// TODO Auto-generated method stub
-		return taskRepo.findAll();
+		return taskRepository.findAll();
 	}
 
 	@Override
 	public Task addTask(Task task) {
-		// TODO Auto-generated method stub
-		return taskRepo.save(task);
+		return taskRepository.save(task);
 	}
 
 	@Override
-	public int deleteTask(int id) {
-		// TODO Auto-generated method stub
-		taskRepo.deleteById(id);
+	public int deleteTask(Long id) {
+		taskRepository.deleteById(id);
 		return 0;
 	}
 
 	@Override
 	public Task updateTask(Task task) {
-		// TODO Auto-generated method stub
-		return taskRepo.save(task);
+		return taskRepository.save(task);
 	}
-	
-	
 
 }

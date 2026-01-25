@@ -15,40 +15,41 @@ import com.example.demo.security.JwtTokenProvider;
 
 @Service
 public class AuthService {
-	
+
 	@Autowired
 	private AuthenticationManager authManager;
-	
+
 	@Autowired
 	private UserRepository userRepo;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private JwtTokenProvider tokenProvider;
-	
+
 	public String login(String email, String password) {
-		Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-		
+		Authentication authentication = authManager
+				.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		
+
 		return tokenProvider.generateToken(authentication);
 	}
-	
+
 	public void register(UserDTO userDTO) {
-		if(userRepo.findByEmail(userDTO.getEmail()).isPresent()) {
+		if (userRepo.findByEmail(userDTO.getEmail()).isPresent()) {
 			throw new RuntimeException("Email is already taken!");
 		}
-		
+
 		User user = new User();
-		
+
 		user.setFullName(userDTO.getFullName());
 		user.setEmail(userDTO.getEmail());
 		user.setPhone(userDTO.getPhone());
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setRol("ROLE_USER");
-		
+
 		userRepo.save(user);
 	}
 
