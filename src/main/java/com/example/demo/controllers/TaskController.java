@@ -1,10 +1,11 @@
 package com.example.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Task;
+import com.example.demo.model.TaskDTO;
 import com.example.demo.services.TasksServices;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +15,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Controller
+@RestController
 @RequestMapping("/tasks")
 public class TaskController {
 
@@ -22,18 +23,18 @@ public class TaskController {
     private TasksServices tasksServices;
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
-        return tasksServices.addTask(task);
+    public Task createTask(@RequestBody TaskDTO taskDTO) {
+        return tasksServices.addTask(taskDTO);
     }
 
     @GetMapping
-    public List<Task> getMethodName() {
+    public List<TaskDTO> getAllTasks() {
         return tasksServices.showAllTasks();
     }
 
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody Task task) {
-        return tasksServices.updateTask(task);
+    public Task updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+        return tasksServices.updateTask(id, taskDTO);
     }
 
     @DeleteMapping("/{id}")

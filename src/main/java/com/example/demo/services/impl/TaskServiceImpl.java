@@ -2,11 +2,13 @@ package com.example.demo.services.impl;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Task;
+import com.example.demo.model.TaskDTO;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.services.TasksServices;
 
@@ -15,27 +17,49 @@ public class TaskServiceImpl implements TasksServices {
 
 	@Autowired
 	@Qualifier("taskRepository")
-	TaskRepository taskRepository;
+	private TaskRepository taskRepository;
 
-	@Override
-	public List<Task> showAllTasks() {
-		return taskRepository.findAll();
+	// Method to transform TaskDTO
+	private TaskDTO transformTaskDTO(Task task) {
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(task, TaskDTO.class);
+	}
+
+	// Method to transform Task
+	private Task transformTask(TaskDTO taskDTO) {
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(taskDTO, Task.class);
 	}
 
 	@Override
-	public Task addTask(Task task) {
-		return taskRepository.save(task);
+	public List<TaskDTO> showAllTasks() {
+		List<TaskDTO> taskDTOs = new java.util.ArrayList<>();
+		for (Task task : taskRepository.findAll()) {
+			taskDTOs.add(transformTaskDTO(task));
+		}
+		return taskDTOs;
+	}
+
+	@Override
+	public Task addTask(TaskDTO taskDTO) {
+		return taskRepository.save(transformTask(taskDTO));
 	}
 
 	@Override
 	public int deleteTask(Long id) {
+		if (!taskRepository.existsById(id)) {
+			throw new IllegalArgumentException("The task not exist for delete");
+		}
 		taskRepository.deleteById(id);
 		return 0;
 	}
 
 	@Override
-	public Task updateTask(Task task) {
-		return taskRepository.save(task);
+	public Task updateTask(Long id, TaskDTO taskDTO) {
+		if (!taskRepository.existsById(id)) {
+			throw new IllegalArgumentException("The task not exist for update");
+		}
+		return taskRepository.save(transformTask(taskDTO));
 	}
 
 }

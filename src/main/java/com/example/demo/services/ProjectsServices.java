@@ -3,17 +3,18 @@ package com.example.demo.services;
 import java.util.List;
 
 import com.example.demo.entity.Project;
+import com.example.demo.model.ProjectDTO;
 
 public interface ProjectsServices {
 
-	List<Project> showAllProjects();
+	List<ProjectDTO> showAllProjects();
 
-	List<Project> showMyProjects(String email);
+	List<ProjectDTO> showMyProjects(String email);
 
-	Project addProject(Project project);
+	Project addProject(ProjectDTO projectDTO);
 
 	int deleteProject(Long id);
 
-	Project updateProject(Project project);
+	Project updateProject(Long id, ProjectDTO projectDTO);
 
 }

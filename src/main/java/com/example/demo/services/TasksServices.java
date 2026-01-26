@@ -3,15 +3,16 @@ package com.example.demo.services;
 import java.util.List;
 
 import com.example.demo.entity.Task;
+import com.example.demo.model.TaskDTO;
 
 public interface TasksServices {
 
-	List<Task> showAllTasks();
+	List<TaskDTO> showAllTasks();
 
-	Task addTask(Task task);
+	Task addTask(TaskDTO taskDTO);
 
 	int deleteTask(Long id);
 
-	Task updateTask(Task task);
+	Task updateTask(Long id, TaskDTO taskDTO);
 
 }
