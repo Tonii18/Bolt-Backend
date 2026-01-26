@@ -40,7 +40,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String rol;
+    private String role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<Task>();

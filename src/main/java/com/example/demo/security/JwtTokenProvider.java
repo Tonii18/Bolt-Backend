@@ -21,11 +21,15 @@ public class JwtTokenProvider {
 		//Despite we use email, the method is called getName() by default
 		
 		String email = authentication.getName();
+		
+		String role = authentication.getAuthorities().stream().findFirst().map(auth -> auth.getAuthority()).orElse("ROLE_USER");
+		
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 		
 		return Jwts.builder()
 				.setSubject(email)
+				.claim("role", role)
 				.setIssuedAt(new Date())
 				.setExpiration(expiryDate)
 				.signWith(key, SignatureAlgorithm.HS512)
