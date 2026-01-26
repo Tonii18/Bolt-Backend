@@ -15,4 +15,6 @@ public interface TasksServices {
 
 	Task updateTask(Long id, TaskDTO taskDTO);
 
+	boolean existTask(Long id);
+
 }

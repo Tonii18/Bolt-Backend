@@ -17,4 +17,6 @@ public interface ProjectsServices {
 
 	Project updateProject(Long id, ProjectDTO projectDTO);
 
+	boolean existProject(Long id);
+
 }

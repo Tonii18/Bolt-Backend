@@ -62,4 +62,9 @@ public class TaskServiceImpl implements TasksServices {
 		return taskRepository.save(transformTask(taskDTO));
 	}
 
+	@Override
+	public boolean existTask(Long id) {
+		return taskRepository.existsById(id);
+	}
+
 }

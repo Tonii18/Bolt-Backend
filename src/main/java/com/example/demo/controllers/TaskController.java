@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,23 +24,33 @@ public class TaskController {
     @Autowired
     private TasksServices tasksServices;
 
-    @PostMapping
-    public Task createTask(@RequestBody TaskDTO taskDTO) {
-        return tasksServices.addTask(taskDTO);
+    @PostMapping("/createdTask")
+    public ResponseEntity<Task> createTask(@RequestBody TaskDTO taskDTO) {
+        Task newTask = tasksServices.addTask(taskDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newTask);
     }
 
-    @GetMapping
-    public List<TaskDTO> getAllTasks() {
-        return tasksServices.showAllTasks();
+    @GetMapping("/allTasks")
+    public ResponseEntity<List<TaskDTO>> getAllTasks() {
+        List<TaskDTO> tasks = tasksServices.showAllTasks();
+        return ResponseEntity.ok(tasks);
     }
 
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
-        return tasksServices.updateTask(id, taskDTO);
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+        if (!tasksServices.existTask(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Task taskUpdate = tasksServices.updateTask(id, taskDTO);
+        return ResponseEntity.ok(taskUpdate);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable Long id) {
-        tasksServices.deleteTask(id);
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        if (tasksServices.deleteTask(id) == 0) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

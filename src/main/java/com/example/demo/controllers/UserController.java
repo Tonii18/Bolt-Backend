@@ -1,8 +1,8 @@
 package com.example.demo.controllers;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,19 +23,29 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping()
-    public List<UserDTO> getAllUser() {
-        return userService.showAllUsers();
+    @GetMapping("/allUsers")
+    public ResponseEntity<List<UserDTO>> getAllUser() {
+        List<UserDTO> users = userService.showAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        return userService.updateUser(id, userDTO);
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        if (!userService.existUser(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User userUpdate = userService.updateUser(id, userDTO);
+        return ResponseEntity.ok(userUpdate);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        if (userService.deleteUser(id) == 0) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

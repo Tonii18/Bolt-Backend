@@ -58,4 +58,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(transformUser(userDTO));
     }
 
+    @Override
+    public boolean existUser(Long id) {
+        return userRepository.findById(id).isPresent();
+    }
+
 }

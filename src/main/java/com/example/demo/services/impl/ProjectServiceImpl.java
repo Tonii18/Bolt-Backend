@@ -79,4 +79,9 @@ public class ProjectServiceImpl implements ProjectsServices {
 		return projectRepository.save(transformProject(projectDTO));
 	}
 
+	@Override
+	public boolean existProject(Long id) {
+		return projectRepository.existsById(id);
+	}
+
 }
