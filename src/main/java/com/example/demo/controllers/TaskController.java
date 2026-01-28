@@ -36,7 +36,7 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
         if (!tasksServices.existTask(id)) {
             return ResponseEntity.notFound().build();
@@ -46,7 +46,7 @@ public class TaskController {
         return ResponseEntity.ok(taskUpdate);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         if (tasksServices.deleteTask(id) == 0) {
             return ResponseEntity.noContent().build();

@@ -44,7 +44,7 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newProject);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody ProjectDTO projectDTO) {
         if (!projectsService.existProject(id)) {
             return ResponseEntity.notFound().build();
@@ -54,7 +54,7 @@ public class ProjectController {
         return ResponseEntity.ok(projectUpdate);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
         if (projectsService.deleteProject(id) == 0) {
             return ResponseEntity.noContent().build();

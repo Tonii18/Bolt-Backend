@@ -29,7 +29,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
         if (!userService.existUser(id)) {
             return ResponseEntity.notFound().build();
@@ -39,7 +39,7 @@ public class UserController {
         return ResponseEntity.ok(userUpdate);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         if (userService.deleteUser(id) == 0) {
             return ResponseEntity.noContent().build();
