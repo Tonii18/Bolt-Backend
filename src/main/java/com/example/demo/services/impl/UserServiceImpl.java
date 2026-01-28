@@ -5,8 +5,12 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.config.SecurityConfig;
 import com.example.demo.entity.User;
 import com.example.demo.model.UserDTO;
 import com.example.demo.repository.UserRepository;
@@ -52,10 +56,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long id, UserDTO userDTO) {
-        if (!userRepository.findById(id).isPresent()) {
-            throw new IllegalArgumentException("The user not exist to update");
+    	User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("The user not exist to update"));
+
+        user.setFullName(userDTO.getFullName());
+        user.setEmail(userDTO.getEmail());
+        user.setPhone(userDTO.getPhone());
+        user.setRole("ROLE_USER");
+
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isBlank()) {
+            user.setPassword(SecurityConfig.passwordEncoder().encode(userDTO.getPassword()));
         }
-        return userRepository.save(transformUser(userDTO));
+
+        return userRepository.save(user);
     }
 
     @Override
