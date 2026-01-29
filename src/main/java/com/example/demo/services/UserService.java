@@ -7,11 +7,13 @@ import com.example.demo.model.UserDTO;
 
 public interface UserService {
 
-    List<UserDTO> showAllUsers();
+	List<UserDTO> showAllUsers();
 
-    int deleteUser(Long id);
+	UserDTO getCurrentUser();
 
-    User updateUser(Long id, UserDTO userDTO);
+	int deleteUser(Long id);
 
-    boolean existUser(Long id);
+	User updateUser(Long id, UserDTO userDTO);
+
+	boolean existUser(Long id);
 }

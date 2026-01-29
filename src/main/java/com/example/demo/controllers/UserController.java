@@ -20,32 +20,38 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @GetMapping("/allUsers")
-    public ResponseEntity<List<UserDTO>> getAllUser() {
-        List<UserDTO> users = userService.showAllUsers();
-        return ResponseEntity.ok(users);
-    }
+	@GetMapping("/allUsers")
+	public ResponseEntity<List<UserDTO>> getAllUser() {
+		List<UserDTO> users = userService.showAllUsers();
+		return ResponseEntity.ok(users);
+	}
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        if (!userService.existUser(id)) {
-            return ResponseEntity.notFound().build();
-        }
+	@GetMapping("/currentUser")
+	public ResponseEntity<UserDTO> getCurrentUser() {
+		UserDTO currentUser = userService.getCurrentUser();
+		return ResponseEntity.ok(currentUser);
+	}
 
-        User userUpdate = userService.updateUser(id, userDTO);
-        return ResponseEntity.ok(userUpdate);
-    }
+	@PutMapping("/update/{id}")
+	public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+		if (!userService.existUser(id)) {
+			return ResponseEntity.notFound().build();
+		}
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        if (userService.deleteUser(id) == 0) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+		User userUpdate = userService.updateUser(id, userDTO);
+		return ResponseEntity.ok(userUpdate);
+	}
+
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+		if (userService.deleteUser(id) == 0) {
+			return ResponseEntity.noContent().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 
 }
