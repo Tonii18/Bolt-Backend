@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-	public UserDTO getCurrentUser() {
+	public User getCurrentUser() {
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     	
     	if(authentication == null || !authentication.isAuthenticated()) {
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
     	User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
     	
-		return transformUserDTO(user);
+		return user;
 	}
 
     @Override

@@ -9,7 +9,7 @@ public interface UserService {
 
 	List<UserDTO> showAllUsers();
 
-	UserDTO getCurrentUser();
+	User getCurrentUser();
 
 	int deleteUser(Long id);
 
