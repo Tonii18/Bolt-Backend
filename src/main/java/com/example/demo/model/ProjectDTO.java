@@ -15,7 +15,7 @@ public class ProjectDTO {
 
     private int id;
     private String name;
-    private String decription;
+    private String description;
     private LocalDateTime creationDate;
 
 }
