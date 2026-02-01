@@ -1,8 +1,10 @@
 package com.example.demo.security;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +17,16 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtTokenProvider {
 
-	private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-	private final long jwtExpirationInMs = 360000;
+//	private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+//	private final long jwtExpirationInMs = 360000;
+	
+	private final Key key;
+
+    private final long jwtExpirationInMs = 360000; // 6 minutos
+
+    public JwtTokenProvider(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
 	public String generateToken(Authentication authentication) {
 
