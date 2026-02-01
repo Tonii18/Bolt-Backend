@@ -1,12 +1,11 @@
 package com.example.demo.security;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -26,27 +25,60 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
 
+//	@Override
+//	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+//			throws ServletException, IOException {
+//
+//		String jwt = getJwtFromRequest(request);
+//
+//		if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+//
+//			String username = tokenProvider.getEmailFromJWT(jwt);
+//			String role = tokenProvider.getRoleFromJWT(jwt); // ROLE_ADMIN
+//
+//			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null,
+//					List.of(new SimpleGrantedAuthority(role)));
+//
+//			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//
+//			SecurityContextHolder.getContext().setAuthentication(authentication);
+//		}
+//
+//		filterChain.doFilter(request, response);
+//	}
+	
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request,
+	                                HttpServletResponse response,
+	                                FilterChain filterChain)
+	        throws ServletException, IOException {
 
-		String jwt = getJwtFromRequest(request);
+	    String jwt = getJwtFromRequest(request);
 
-		if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+	    if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
 
-			String username = tokenProvider.getEmailFromJWT(jwt);
-			String role = tokenProvider.getRoleFromJWT(jwt); // ROLE_ADMIN
+	        String email = tokenProvider.getEmailFromJWT(jwt);
 
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null,
-					List.of(new SimpleGrantedAuthority(role)));
+	        UserDetails userDetails =
+	                customUserDetailsService.loadUserByUsername(email);
 
-			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+	        UsernamePasswordAuthenticationToken authentication =
+	                new UsernamePasswordAuthenticationToken(
+	                        userDetails,
+	                        null,
+	                        userDetails.getAuthorities()
+	                );
 
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-		}
+	        authentication.setDetails(
+	                new WebAuthenticationDetailsSource().buildDetails(request)
+	        );
 
-		filterChain.doFilter(request, response);
+	        SecurityContextHolder.getContext().setAuthentication(authentication);
+	    }
+
+	    filterChain.doFilter(request, response);
 	}
+
 
 	private String getJwtFromRequest(HttpServletRequest request) {
 		String bearerToken = request.getHeader("Authorization");
