@@ -26,31 +26,11 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
-//	@Bean
-//	public SecurityFilterChain securityFilterChain(HttpSecurity http) {
-//		http.csrf(csrf -> csrf.disable())
-//		.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//		.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
-//		.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//		
-//		return http.build();
-//	}
-	
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 		http.csrf(csrf -> csrf.disable())
 		.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-		.authorizeHttpRequests(auth -> auth
-			.requestMatchers("/auth/**").permitAll()
-			// Configuración específica para proyectos (roles ya tienen ROLE_ en BD)
-			.requestMatchers("/projects/createdProject").hasAuthority("ROLE_ADMIN")
-			.requestMatchers("/projects/update/**").hasAuthority("ROLE_ADMIN")
-			.requestMatchers("/projects/delete/**").hasAuthority("ROLE_ADMIN")
-			.requestMatchers("/projects/allProjects").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-			.requestMatchers("/projects/userProjects").authenticated()
-			// Cualquier otra petición requiere autenticación
-			.anyRequest().authenticated()
-		)
+		.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
 		.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		return http.build();
