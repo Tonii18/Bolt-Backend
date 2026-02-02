@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProjectDTO {
 
-    private int id;
+    //private Long id;
     private String name;
     private String description;
     private LocalDateTime creationDate;
