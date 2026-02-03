@@ -12,6 +12,7 @@ import com.example.demo.entity.Project;
 import com.example.demo.entity.User;
 import com.example.demo.model.ProjectCreateDTO;
 import com.example.demo.model.ProjectDTO;
+import com.example.demo.model.ProjectEditDTO;
 import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.ProjectsServices;
@@ -73,7 +74,7 @@ public class ProjectServiceImpl implements ProjectsServices {
 	}
 
 	@Override
-	public Project updateProject(Long id, ProjectCreateDTO projectDTO) {
+	public ProjectEditDTO updateProject(Long id, ProjectEditDTO projectDTO) {
 		Project existingProject = projectRepository.findById(id).orElse(null);
 		if (existingProject == null) {
 			throw new IllegalArgumentException("The project not exist for update");
@@ -82,7 +83,9 @@ public class ProjectServiceImpl implements ProjectsServices {
 		existingProject.setName(projectDTO.getName());
 		existingProject.setDescription(projectDTO.getDescription());
 
-		return projectRepository.save(existingProject);
+		Project saved = projectRepository.save(existingProject);
+		
+		return new ProjectEditDTO(saved.getId(), saved.getName(), saved.getDescription());
 	}
 
 	@Override

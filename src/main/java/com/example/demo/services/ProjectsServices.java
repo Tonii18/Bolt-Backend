@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.demo.entity.Project;
 import com.example.demo.model.ProjectCreateDTO;
 import com.example.demo.model.ProjectDTO;
+import com.example.demo.model.ProjectEditDTO;
 
 public interface ProjectsServices {
 
@@ -16,7 +17,7 @@ public interface ProjectsServices {
 
 	int deleteProject(Long id);
 
-	Project updateProject(Long id, ProjectCreateDTO projectDTO);
+	ProjectEditDTO updateProject(Long id, ProjectEditDTO projectDTO);
 
 	boolean existProject(Long id);
 

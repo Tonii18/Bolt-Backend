@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.Project;
 import com.example.demo.model.ProjectCreateDTO;
 import com.example.demo.model.ProjectDTO;
+import com.example.demo.model.ProjectEditDTO;
 import com.example.demo.services.ProjectsServices;
 
 @RestController
@@ -46,12 +47,12 @@ public class ProjectController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody ProjectCreateDTO projectDTO) {
+    public ResponseEntity<ProjectEditDTO> updateProject(@PathVariable Long id, @RequestBody ProjectEditDTO projectDTO) {
         if (!projectsService.existProject(id)) {
             return ResponseEntity.notFound().build();
         }
 
-        Project projectUpdate = projectsService.updateProject(id, projectDTO);
+        ProjectEditDTO projectUpdate = projectsService.updateProject(id, projectDTO);
         return ResponseEntity.ok(projectUpdate);
     }
 
