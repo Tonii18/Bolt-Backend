@@ -6,18 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Project;
+import com.example.demo.model.ProjectCreateDTO;
 import com.example.demo.model.ProjectDTO;
 import com.example.demo.services.ProjectsServices;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/projects")
@@ -39,13 +40,13 @@ public class ProjectController {
     }
 
     @PostMapping("/createdProject")
-    public ResponseEntity<Project> createProject(@RequestBody ProjectDTO projectDTO) {
+    public ResponseEntity<Project> createProject(@RequestBody ProjectCreateDTO projectDTO) {
         Project newProject = projectsService.addProject(projectDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newProject);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody ProjectDTO projectDTO) {
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody ProjectCreateDTO projectDTO) {
         if (!projectsService.existProject(id)) {
             return ResponseEntity.notFound().build();
         }

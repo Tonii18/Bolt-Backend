@@ -3,17 +3,18 @@ package com.example.demo.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Project;
 import com.example.demo.entity.User;
+import com.example.demo.model.ProjectCreateDTO;
 import com.example.demo.model.ProjectDTO;
 import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.ProjectsServices;
-import org.modelmapper.ModelMapper;
 
 @Service("projectService")
 public class ProjectServiceImpl implements ProjectsServices {
@@ -33,7 +34,7 @@ public class ProjectServiceImpl implements ProjectsServices {
 	}
 
 	// Method to transform Project
-	private Project transformProject(ProjectDTO projectDTO) {
+	private Project transformProject(ProjectCreateDTO projectDTO) {
 		ModelMapper modelMapper = new ModelMapper();
 		return modelMapper.map(projectDTO, Project.class);
 	}
@@ -58,7 +59,7 @@ public class ProjectServiceImpl implements ProjectsServices {
 	}
 
 	@Override
-	public Project addProject(ProjectDTO projectDTO) {
+	public Project addProject(ProjectCreateDTO projectDTO) {
 		return projectRepository.save(transformProject(projectDTO));
 	}
 
@@ -72,11 +73,16 @@ public class ProjectServiceImpl implements ProjectsServices {
 	}
 
 	@Override
-	public Project updateProject(Long id, ProjectDTO projectDTO) {
-		if (!projectRepository.existsById(id)) {
-			throw new IllegalArgumentException("The project not exist for edit");
+	public Project updateProject(Long id, ProjectCreateDTO projectDTO) {
+		Project existingProject = projectRepository.findById(id).orElse(null);
+		if (existingProject == null) {
+			throw new IllegalArgumentException("The project not exist for update");
 		}
-		return projectRepository.save(transformProject(projectDTO));
+
+		existingProject.setName(projectDTO.getName());
+		existingProject.setDescription(projectDTO.getDescription());
+
+		return projectRepository.save(existingProject);
 	}
 
 	@Override
