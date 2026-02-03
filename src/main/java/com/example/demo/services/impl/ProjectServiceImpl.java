@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Project;
 import com.example.demo.entity.User;
-import com.example.demo.model.ProjectDTO;
+import com.example.demo.model.ProjectCreateDTO;
 import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.ProjectsServices;
@@ -27,20 +27,20 @@ public class ProjectServiceImpl implements ProjectsServices {
 	private UserRepository userRepository;
 
 	// Method to transform ProjectDTO
-	private ProjectDTO transformProjectDTO(Project project) {
+	private ProjectCreateDTO transformProjectDTO(Project project) {
 		ModelMapper modelMapper = new ModelMapper();
-		return modelMapper.map(project, ProjectDTO.class);
+		return modelMapper.map(project, ProjectCreateDTO.class);
 	}
 
 	// Method to transform Project
-	private Project transformProject(ProjectDTO projectDTO) {
+	private Project transformProject(ProjectCreateDTO projectDTO) {
 		ModelMapper modelMapper = new ModelMapper();
 		return modelMapper.map(projectDTO, Project.class);
 	}
 
 	@Override
-	public List<ProjectDTO> showAllProjects() {
-		List<ProjectDTO> projectDTOs = new ArrayList<>();
+	public List<ProjectCreateDTO> showAllProjects() {
+		List<ProjectCreateDTO> projectDTOs = new ArrayList<>();
 		for (Project project : projectRepository.findAll()) {
 			projectDTOs.add(transformProjectDTO(project));
 		}
@@ -48,9 +48,9 @@ public class ProjectServiceImpl implements ProjectsServices {
 	}
 
 	@Override
-	public List<ProjectDTO> showMyProjects(String email) {
+	public List<ProjectCreateDTO> showMyProjects(String email) {
 		User user = userRepository.findByEmail(email).orElse(null);
-		List<ProjectDTO> projectDTOs = new ArrayList<>();
+		List<ProjectCreateDTO> projectDTOs = new ArrayList<>();
 		for (Project project : projectRepository.findByUsersId(user.getId())) {
 			projectDTOs.add(transformProjectDTO(project));
 		}
@@ -58,7 +58,7 @@ public class ProjectServiceImpl implements ProjectsServices {
 	}
 
 	@Override
-	public Project addProject(ProjectDTO projectDTO) {
+	public Project addProject(ProjectCreateDTO projectDTO) {
 		return projectRepository.save(transformProject(projectDTO));
 	}
 
@@ -72,7 +72,7 @@ public class ProjectServiceImpl implements ProjectsServices {
 	}
 
 	@Override
-	public Project updateProject(Long id, ProjectDTO projectDTO) {
+	public Project updateProject(Long id, ProjectCreateDTO projectDTO) {
 		Project existingProject = projectRepository.findById(id).orElse(null);
 		if (existingProject == null) {
 			throw new IllegalArgumentException("The project not exist for update");

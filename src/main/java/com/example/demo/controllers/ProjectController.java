@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Project;
-import com.example.demo.model.ProjectDTO;
+import com.example.demo.model.ProjectCreateDTO;
 import com.example.demo.services.ProjectsServices;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,25 +27,25 @@ public class ProjectController {
     private ProjectsServices projectsService;
 
     @GetMapping("/allProjects")
-    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
-        List<ProjectDTO> projects = projectsService.showAllProjects();
+    public ResponseEntity<List<ProjectCreateDTO>> getAllProjects() {
+        List<ProjectCreateDTO> projects = projectsService.showAllProjects();
         return ResponseEntity.ok(projects);
     }
 
     @GetMapping("/userProjects")
-    public ResponseEntity<List<ProjectDTO>> getMyProjects(Authentication authentication) {
-        List<ProjectDTO> myProjects = projectsService.showMyProjects(authentication.getName());
+    public ResponseEntity<List<ProjectCreateDTO>> getMyProjects(Authentication authentication) {
+        List<ProjectCreateDTO> myProjects = projectsService.showMyProjects(authentication.getName());
         return ResponseEntity.ok(myProjects);
     }
 
     @PostMapping("/createdProject")
-    public ResponseEntity<Project> createProject(@RequestBody ProjectDTO projectDTO) {
+    public ResponseEntity<Project> createProject(@RequestBody ProjectCreateDTO projectDTO) {
         Project newProject = projectsService.addProject(projectDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newProject);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody ProjectDTO projectDTO) {
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody ProjectCreateDTO projectDTO) {
         if (!projectsService.existProject(id)) {
             return ResponseEntity.notFound().build();
         }
