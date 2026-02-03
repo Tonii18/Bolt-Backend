@@ -6,18 +6,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Project;
 import com.example.demo.model.ProjectCreateDTO;
+import com.example.demo.model.ProjectDTO;
 import com.example.demo.services.ProjectsServices;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/projects")
@@ -27,14 +28,14 @@ public class ProjectController {
     private ProjectsServices projectsService;
 
     @GetMapping("/allProjects")
-    public ResponseEntity<List<ProjectCreateDTO>> getAllProjects() {
-        List<ProjectCreateDTO> projects = projectsService.showAllProjects();
+    public ResponseEntity<List<ProjectDTO>> getAllProjects() {
+        List<ProjectDTO> projects = projectsService.showAllProjects();
         return ResponseEntity.ok(projects);
     }
 
     @GetMapping("/userProjects")
-    public ResponseEntity<List<ProjectCreateDTO>> getMyProjects(Authentication authentication) {
-        List<ProjectCreateDTO> myProjects = projectsService.showMyProjects(authentication.getName());
+    public ResponseEntity<List<ProjectDTO>> getMyProjects(Authentication authentication) {
+        List<ProjectDTO> myProjects = projectsService.showMyProjects(authentication.getName());
         return ResponseEntity.ok(myProjects);
     }
 

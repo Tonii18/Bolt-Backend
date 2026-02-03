@@ -3,6 +3,7 @@ package com.example.demo.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -10,10 +11,10 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.Project;
 import com.example.demo.entity.User;
 import com.example.demo.model.ProjectCreateDTO;
+import com.example.demo.model.ProjectDTO;
 import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.ProjectsServices;
-import org.modelmapper.ModelMapper;
 
 @Service("projectService")
 public class ProjectServiceImpl implements ProjectsServices {
@@ -27,9 +28,9 @@ public class ProjectServiceImpl implements ProjectsServices {
 	private UserRepository userRepository;
 
 	// Method to transform ProjectDTO
-	private ProjectCreateDTO transformProjectDTO(Project project) {
+	private ProjectDTO transformProjectDTO(Project project) {
 		ModelMapper modelMapper = new ModelMapper();
-		return modelMapper.map(project, ProjectCreateDTO.class);
+		return modelMapper.map(project, ProjectDTO.class);
 	}
 
 	// Method to transform Project
@@ -39,8 +40,8 @@ public class ProjectServiceImpl implements ProjectsServices {
 	}
 
 	@Override
-	public List<ProjectCreateDTO> showAllProjects() {
-		List<ProjectCreateDTO> projectDTOs = new ArrayList<>();
+	public List<ProjectDTO> showAllProjects() {
+		List<ProjectDTO> projectDTOs = new ArrayList<>();
 		for (Project project : projectRepository.findAll()) {
 			projectDTOs.add(transformProjectDTO(project));
 		}
@@ -48,9 +49,9 @@ public class ProjectServiceImpl implements ProjectsServices {
 	}
 
 	@Override
-	public List<ProjectCreateDTO> showMyProjects(String email) {
+	public List<ProjectDTO> showMyProjects(String email) {
 		User user = userRepository.findByEmail(email).orElse(null);
-		List<ProjectCreateDTO> projectDTOs = new ArrayList<>();
+		List<ProjectDTO> projectDTOs = new ArrayList<>();
 		for (Project project : projectRepository.findByUsersId(user.getId())) {
 			projectDTOs.add(transformProjectDTO(project));
 		}
