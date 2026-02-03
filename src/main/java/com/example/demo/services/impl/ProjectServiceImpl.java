@@ -73,10 +73,15 @@ public class ProjectServiceImpl implements ProjectsServices {
 
 	@Override
 	public Project updateProject(Long id, ProjectDTO projectDTO) {
-		if (!projectRepository.existsById(id)) {
-			throw new IllegalArgumentException("The project not exist for edit");
+		Project existingProject = projectRepository.findById(id).orElse(null);
+		if (existingProject == null) {
+			throw new IllegalArgumentException("The project not exist for update");
 		}
-		return projectRepository.save(transformProject(projectDTO));
+
+		existingProject.setName(projectDTO.getName());
+		existingProject.setDescription(projectDTO.getDescription());
+
+		return projectRepository.save(existingProject);
 	}
 
 	@Override
