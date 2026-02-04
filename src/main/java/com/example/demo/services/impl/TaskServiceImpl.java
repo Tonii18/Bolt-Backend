@@ -84,6 +84,7 @@ public class TaskServiceImpl implements TasksServices {
 		
 		for(Task t: tasks) {
 			TaskAdminDTO dto = new TaskAdminDTO(t.getName(), t.getDescription());
+			tasksTransformed.add(dto);
 		}
 		
 		return tasksTransformed;
