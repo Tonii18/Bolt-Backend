@@ -4,10 +4,11 @@ import java.util.List;
 
 import com.example.demo.entity.User;
 import com.example.demo.model.UserDTO;
+import com.example.demo.model.UserProjectDTO;
 
 public interface UserService {
 
-	List<UserDTO> showAllUsers();
+	List<UserProjectDTO> showAllUsers();
 
 	User getCurrentUser();
 

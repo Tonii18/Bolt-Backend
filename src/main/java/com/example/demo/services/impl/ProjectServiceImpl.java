@@ -93,4 +93,30 @@ public class ProjectServiceImpl implements ProjectsServices {
 		return projectRepository.existsById(id);
 	}
 
+	@Override
+	public void addUserToProject(Long projectId, Long userId) {
+		Project project = projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
+		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+		
+		if(!project.getUsers().contains(user)) {
+			project.getUsers().add(user);
+			projectRepository.save(project);
+		}
+	}
+
+	@Override
+	public void removeUserfromProject(Long projectId, Long userId) {
+		Project project = projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
+		
+		project.getUsers().removeIf(u -> u.getId().equals(userId));
+		projectRepository.save(project);
+	}
+
+	@Override
+	public List<User> getUsersByProject(Long projectId) {
+		Project project = projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
+		
+		return project.getUsers();
+	}
+
 }

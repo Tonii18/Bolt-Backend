@@ -5,16 +5,14 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.config.SecurityConfig;
 import com.example.demo.entity.User;
 import com.example.demo.model.UserDTO;
+import com.example.demo.model.UserProjectDTO;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.UserService;
 
@@ -26,9 +24,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     // Method to transform UserDTO
-    private UserDTO transformUserDTO(User user) {
+    private UserProjectDTO transformUserDTO(User user) {
         ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(user, UserDTO.class);
+        return modelMapper.map(user, UserProjectDTO.class);
     }
 
     // Method to transform User
@@ -36,10 +34,18 @@ public class UserServiceImpl implements UserService {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(userDTO, User.class);
     }
+    
+    private UserProjectDTO transformUserProjectDTO(User user) {
+        return new UserProjectDTO(
+            user.getId(),
+            user.getFullName(),
+            user.getEmail()
+        );
+    }
 
     @Override
-    public List<UserDTO> showAllUsers() {
-        List<UserDTO> userDTOs = new java.util.ArrayList<>();
+    public List<UserProjectDTO> showAllUsers() {
+        List<UserProjectDTO> userDTOs = new java.util.ArrayList<>();
         for (User user : userRepository.findAll()) {
             userDTOs.add(transformUserDTO(user));
         }

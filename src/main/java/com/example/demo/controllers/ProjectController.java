@@ -19,6 +19,8 @@ import com.example.demo.entity.Project;
 import com.example.demo.model.ProjectCreateDTO;
 import com.example.demo.model.ProjectDTO;
 import com.example.demo.model.ProjectEditDTO;
+import com.example.demo.model.UserDTO;
+import com.example.demo.model.UserProjectDTO;
 import com.example.demo.services.ProjectsServices;
 
 @RestController
@@ -63,6 +65,41 @@ public class ProjectController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    
+    /*
+     * Controllers related to users and projects
+     */
+    
+    // Get users by project
+    
+    @GetMapping("/{projectId}/users")
+    public ResponseEntity<List<UserProjectDTO>> getProjectUsers(@PathVariable Long projectId){
+    	List<UserProjectDTO> users = projectsService.getUsersByProject(projectId).stream().map(user -> new UserProjectDTO(
+                user.getId(),
+                user.getFullName(),
+                user.getEmail()
+            )).toList();
+    	
+    	return ResponseEntity.ok(users);
+    }
+    
+    // Add user to project
+    
+    @PostMapping("/{projectId}/users/{userId}")
+    public ResponseEntity<Void> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId){
+    	projectsService.addUserToProject(projectId, userId);
+    	
+    	return ResponseEntity.ok().build();
+    }
+    
+    // Delete user from project
+    
+    @DeleteMapping("/{projectId}/users/{userId}")
+    public ResponseEntity<Void> removeUserFromProject(@PathVariable Long projectId, @PathVariable Long userId){
+    	projectsService.removeUserfromProject(projectId, userId);
+    	
+    	return ResponseEntity.noContent().build();
     }
 
 }
