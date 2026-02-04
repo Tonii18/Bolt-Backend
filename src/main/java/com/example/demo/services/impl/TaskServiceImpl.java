@@ -1,5 +1,6 @@
 package com.example.demo.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -7,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Project;
 import com.example.demo.entity.Task;
+import com.example.demo.model.TaskAdminDTO;
 import com.example.demo.model.TaskDTO;
+import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.services.TasksServices;
 
@@ -18,6 +22,10 @@ public class TaskServiceImpl implements TasksServices {
 	@Autowired
 	@Qualifier("taskRepository")
 	private TaskRepository taskRepository;
+	
+	@Autowired
+	@Qualifier("projectRepository")
+	private ProjectRepository projectRepository;
 
 	// Method to transform TaskDTO
 	private TaskDTO transformTaskDTO(Task task) {
@@ -65,6 +73,20 @@ public class TaskServiceImpl implements TasksServices {
 	@Override
 	public boolean existTask(Long id) {
 		return taskRepository.existsById(id);
+	}
+
+	@Override
+	public List<TaskAdminDTO> showAllTasksByProject(Long projectId) {
+		Project project = projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
+		
+		List<Task> tasks = project.getTasks();
+		List<TaskAdminDTO> tasksTransformed = new ArrayList<>();
+		
+		for(Task t: tasks) {
+			TaskAdminDTO dto = new TaskAdminDTO(t.getName(), t.getDescription());
+		}
+		
+		return tasksTransformed;
 	}
 
 }

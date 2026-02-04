@@ -3,6 +3,7 @@ package com.example.demo.services;
 import java.util.List;
 
 import com.example.demo.entity.Task;
+import com.example.demo.model.TaskAdminDTO;
 import com.example.demo.model.TaskDTO;
 
 public interface TasksServices {
@@ -16,5 +17,7 @@ public interface TasksServices {
 	Task updateTask(Long id, TaskDTO taskDTO);
 
 	boolean existTask(Long id);
+	
+	List<TaskAdminDTO> showAllTasksByProject(Long projectId);
 
 }
