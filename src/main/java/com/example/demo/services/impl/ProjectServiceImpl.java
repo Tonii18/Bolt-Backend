@@ -84,7 +84,7 @@ public class ProjectServiceImpl implements ProjectsServices {
 		existingProject.setDescription(projectDTO.getDescription());
 
 		Project saved = projectRepository.save(existingProject);
-		
+
 		return new ProjectEditDTO(saved.getId(), saved.getName(), saved.getDescription());
 	}
 
@@ -95,10 +95,11 @@ public class ProjectServiceImpl implements ProjectsServices {
 
 	@Override
 	public void addUserToProject(Long projectId, Long userId) {
-		Project project = projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new RuntimeException("Project not found"));
 		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-		
-		if(!project.getUsers().contains(user)) {
+
+		if (!project.getUsers().contains(user)) {
 			project.getUsers().add(user);
 			projectRepository.save(project);
 		}
@@ -106,17 +107,26 @@ public class ProjectServiceImpl implements ProjectsServices {
 
 	@Override
 	public void removeUserfromProject(Long projectId, Long userId) {
-		Project project = projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
-		
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new RuntimeException("Project not found"));
+
 		project.getUsers().removeIf(u -> u.getId().equals(userId));
 		projectRepository.save(project);
 	}
 
 	@Override
 	public List<User> getUsersByProject(Long projectId) {
-		Project project = projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
-		
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new RuntimeException("Project not found"));
+
 		return project.getUsers();
+	}
+
+	@Override
+	public List<Project> getProjectsByUser(Long userId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+		return projectRepository.findByUsersId(user.getId());
 	}
 
 }

@@ -22,6 +22,7 @@ import com.example.demo.model.ProjectEditDTO;
 import com.example.demo.model.UserDTO;
 import com.example.demo.model.UserProjectDTO;
 import com.example.demo.services.ProjectsServices;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/projects")
@@ -66,40 +67,47 @@ public class ProjectController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     /*
      * Controllers related to users and projects
      */
-    
+
     // Get users by project
-    
+
     @GetMapping("/{projectId}/users")
-    public ResponseEntity<List<UserProjectDTO>> getProjectUsers(@PathVariable Long projectId){
-    	List<UserProjectDTO> users = projectsService.getUsersByProject(projectId).stream().map(user -> new UserProjectDTO(
-                user.getId(),
-                user.getFullName(),
-                user.getEmail()
-            )).toList();
-    	
-    	return ResponseEntity.ok(users);
+    public ResponseEntity<List<UserProjectDTO>> getProjectUsers(@PathVariable Long projectId) {
+        List<UserProjectDTO> users = projectsService.getUsersByProject(projectId).stream()
+                .map(user -> new UserProjectDTO(
+                        user.getId(),
+                        user.getFullName(),
+                        user.getEmail()))
+                .toList();
+
+        return ResponseEntity.ok(users);
     }
-    
+
     // Add user to project
-    
+
     @PostMapping("/{projectId}/users/{userId}")
-    public ResponseEntity<Void> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId){
-    	projectsService.addUserToProject(projectId, userId);
-    	
-    	return ResponseEntity.ok().build();
+    public ResponseEntity<Void> addUserToProject(@PathVariable Long projectId, @PathVariable Long userId) {
+        projectsService.addUserToProject(projectId, userId);
+
+        return ResponseEntity.ok().build();
     }
-    
+
     // Delete user from project
-    
+
     @DeleteMapping("/{projectId}/users/{userId}")
-    public ResponseEntity<Void> removeUserFromProject(@PathVariable Long projectId, @PathVariable Long userId){
-    	projectsService.removeUserfromProject(projectId, userId);
-    	
-    	return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> removeUserFromProject(@PathVariable Long projectId, @PathVariable Long userId) {
+        projectsService.removeUserfromProject(projectId, userId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/projectsByUser/{userId}")
+    public ResponseEntity<List<Project>> getProjectsByUser(@PathVariable Long userId) {
+        List<Project> projects = projectsService.getProjectsByUser(userId);
+        return ResponseEntity.ok(projects);
     }
 
 }

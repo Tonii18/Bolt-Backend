@@ -28,4 +28,6 @@ public interface ProjectsServices {
 	
 	List<User> getUsersByProject(Long projectId);
 
+	List<Project> getProjectsByUser(Long userId);
+
 }
