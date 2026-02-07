@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -64,7 +65,9 @@ public class TaskController {
     }
 
     @PutMapping("/updateState/{id}")
-    public ResponseEntity<Task> updateStateTask(@PathVariable Long id, @RequestBody String state) {
+    public ResponseEntity<Task> updateStateTask(@PathVariable Long id, @RequestBody Map<String, String> request) {
+        String state = request.get("state");
+        
         if (!tasksServices.existTask(id)) {
             return ResponseEntity.notFound().build();
         }
