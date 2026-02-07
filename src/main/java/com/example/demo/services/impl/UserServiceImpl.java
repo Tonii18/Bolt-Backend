@@ -34,13 +34,12 @@ public class UserServiceImpl implements UserService {
         ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(userDTO, User.class);
     }
-    
+
     private UserProjectDTO transformUserProjectDTO(User user) {
         return new UserProjectDTO(
-            user.getId(),
-            user.getFullName(),
-            user.getEmail()
-        );
+                user.getId(),
+                user.getFullName(),
+                user.getEmail());
     }
 
     @Override
@@ -52,22 +51,28 @@ public class UserServiceImpl implements UserService {
         return userDTOs;
 
     }
-    
+
     @Override
-	public User getCurrentUser() {
-    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    	
-    	if(authentication == null || !authentication.isAuthenticated()) {
-    		throw new IllegalStateException("There is no authenticated user");
-    	}
-    	
-    	String email = authentication.getName();
-    	
-    	User user = userRepository.findByEmail(email)
+    public UserDTO getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalStateException("There is no authenticated user");
+        }
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-    	
-		return user;
-	}
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setFullName(user.getFullName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPhone(user.getPhone());
+        userDTO.setRole(user.getRole());
+
+        return userDTO;
+    }
 
     @Override
     public int deleteUser(Long id) {
@@ -80,7 +85,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long id, UserDTO userDTO) {
-    	User user = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("The user not exist to update"));
 
         user.setFullName(userDTO.getFullName());
