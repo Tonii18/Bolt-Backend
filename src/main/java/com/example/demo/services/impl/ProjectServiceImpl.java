@@ -123,10 +123,15 @@ public class ProjectServiceImpl implements ProjectsServices {
 	}
 
 	@Override
-	public List<Project> getProjectsByUser(Long userId) {
+	public List<ProjectDTO> getProjectsByUser(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
-		return projectRepository.findByUsersId(user.getId());
+		List<Project> projects = projectRepository.findByUsersId(user.getId());
+		List<ProjectDTO> projectDTOs = new ArrayList<>();
+		for (Project project : projects) {
+			projectDTOs.add(transformProjectDTO(project));
+		}
+		return projectDTOs;
 	}
 
 }

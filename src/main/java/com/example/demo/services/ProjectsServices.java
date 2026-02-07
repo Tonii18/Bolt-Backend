@@ -21,13 +21,13 @@ public interface ProjectsServices {
 	ProjectEditDTO updateProject(Long id, ProjectEditDTO projectDTO);
 
 	boolean existProject(Long id);
-	
+
 	void addUserToProject(Long projectId, Long userId);
-	
+
 	void removeUserfromProject(Long projectId, Long userId);
-	
+
 	List<User> getUsersByProject(Long projectId);
 
-	List<Project> getProjectsByUser(Long userId);
+	List<ProjectDTO> getProjectsByUser(Long userId);
 
 }
