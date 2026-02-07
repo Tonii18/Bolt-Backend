@@ -20,4 +20,6 @@ public interface TasksServices {
 
 	List<TaskAdminDTO> showAllTasksByProject(Long projectId);
 
+	Task updateStatuTask(Long id, String state);
+
 }

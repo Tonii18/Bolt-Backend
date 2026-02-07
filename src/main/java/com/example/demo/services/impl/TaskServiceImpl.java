@@ -95,4 +95,14 @@ public class TaskServiceImpl implements TasksServices {
 		return tasksTransformed;
 	}
 
+	@Override
+	public Task updateStatuTask(Long id, String state) {
+		Task existingTask = taskRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("The task not exist for update"));
+
+		existingTask.setState(state);
+
+		return taskRepository.save(existingTask);
+	}
+
 }

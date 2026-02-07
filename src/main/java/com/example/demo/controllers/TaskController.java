@@ -62,4 +62,15 @@ public class TaskController {
 
         return ResponseEntity.ok(tasks);
     }
+
+    @PutMapping("/updateState/{id}")
+    public ResponseEntity<Task> updateStateTask(@PathVariable Long id, @RequestBody String state) {
+        if (!tasksServices.existTask(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Task taskUpdate = tasksServices.updateStatuTask(id, state);
+
+        return ResponseEntity.ok(taskUpdate);
+    };
 }
