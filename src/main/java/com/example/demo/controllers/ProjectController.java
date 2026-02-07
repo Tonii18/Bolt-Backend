@@ -105,8 +105,8 @@ public class ProjectController {
     }
 
     @GetMapping("/projectsByUser/{userId}")
-    public ResponseEntity<List<Project>> getProjectsByUser(@PathVariable Long userId) {
-        List<Project> projects = projectsService.getProjectsByUser(userId);
+    public ResponseEntity<List<ProjectDTO>> getProjectsByUser(@PathVariable Long userId) {
+        List<ProjectDTO> projects = projectsService.getProjectsByUser(userId);
         return ResponseEntity.ok(projects);
     }
 
