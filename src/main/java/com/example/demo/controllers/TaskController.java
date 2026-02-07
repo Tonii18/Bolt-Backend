@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.Task;
 import com.example.demo.model.TaskAdminDTO;
 import com.example.demo.model.TaskDTO;
+import com.example.demo.model.TaskEditDTO;
 import com.example.demo.services.TasksServices;
 
 @RestController
@@ -39,12 +40,12 @@ public class TaskController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskEditDTO taskEditDTO) {
         if (!tasksServices.existTask(id)) {
             return ResponseEntity.notFound().build();
         }
 
-        Task taskUpdate = tasksServices.updateTask(id, taskDTO);
+        Task taskUpdate = tasksServices.updateTask(id, taskEditDTO);
         return ResponseEntity.ok(taskUpdate);
     }
 
@@ -55,11 +56,11 @@ public class TaskController {
         }
         return ResponseEntity.notFound().build();
     }
-    
+
     @GetMapping("{projectId}/allTasks")
-    public ResponseEntity<List<TaskAdminDTO>> getAllTasksByProject(@PathVariable Long projectId){
-    	List<TaskAdminDTO> tasks = tasksServices.showAllTasksByProject(projectId);
-    	
-    	return ResponseEntity.ok(tasks);
+    public ResponseEntity<List<TaskAdminDTO>> getAllTasksByProject(@PathVariable Long projectId) {
+        List<TaskAdminDTO> tasks = tasksServices.showAllTasksByProject(projectId);
+
+        return ResponseEntity.ok(tasks);
     }
 }

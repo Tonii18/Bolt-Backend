@@ -12,6 +12,7 @@ import com.example.demo.entity.Project;
 import com.example.demo.entity.Task;
 import com.example.demo.model.TaskAdminDTO;
 import com.example.demo.model.TaskDTO;
+import com.example.demo.model.TaskEditDTO;
 import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.services.TasksServices;
@@ -22,7 +23,7 @@ public class TaskServiceImpl implements TasksServices {
 	@Autowired
 	@Qualifier("taskRepository")
 	private TaskRepository taskRepository;
-	
+
 	@Autowired
 	@Qualifier("projectRepository")
 	private ProjectRepository projectRepository;
@@ -37,6 +38,11 @@ public class TaskServiceImpl implements TasksServices {
 	private Task transformTask(TaskDTO taskDTO) {
 		ModelMapper modelMapper = new ModelMapper();
 		return modelMapper.map(taskDTO, Task.class);
+	}
+
+	private Task transformTask(TaskEditDTO taskEditDTO) {
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(taskEditDTO, Task.class);
 	}
 
 	@Override
@@ -63,11 +69,15 @@ public class TaskServiceImpl implements TasksServices {
 	}
 
 	@Override
-	public Task updateTask(Long id, TaskDTO taskDTO) {
-		if (!taskRepository.existsById(id)) {
-			throw new IllegalArgumentException("The task not exist for update");
-		}
-		return taskRepository.save(transformTask(taskDTO));
+	public Task updateTask(Long id, TaskEditDTO taskEditDTO) {
+		Task existingTask = taskRepository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("The task not exist for update"));
+
+		existingTask.setName(taskEditDTO.getTitle());
+		existingTask.setDescription(taskEditDTO.getDescription());
+		existingTask.setState(taskEditDTO.getState());
+
+		return taskRepository.save(existingTask);
 	}
 
 	@Override
@@ -77,16 +87,17 @@ public class TaskServiceImpl implements TasksServices {
 
 	@Override
 	public List<TaskAdminDTO> showAllTasksByProject(Long projectId) {
-		Project project = projectRepository.findById(projectId).orElseThrow(() -> new RuntimeException("Project not found"));
-		
+		Project project = projectRepository.findById(projectId)
+				.orElseThrow(() -> new RuntimeException("Project not found"));
+
 		List<Task> tasks = project.getTasks();
 		List<TaskAdminDTO> tasksTransformed = new ArrayList<>();
-		
-		for(Task t: tasks) {
+
+		for (Task t : tasks) {
 			TaskAdminDTO dto = new TaskAdminDTO(t.getName(), t.getDescription());
 			tasksTransformed.add(dto);
 		}
-		
+
 		return tasksTransformed;
 	}
 

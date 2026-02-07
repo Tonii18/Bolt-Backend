@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.demo.entity.Task;
 import com.example.demo.model.TaskAdminDTO;
 import com.example.demo.model.TaskDTO;
+import com.example.demo.model.TaskEditDTO;
 
 public interface TasksServices {
 
@@ -14,7 +15,7 @@ public interface TasksServices {
 
 	int deleteTask(Long id);
 
-	Task updateTask(Long id, TaskDTO taskDTO);
+	Task updateTask(Long id, TaskEditDTO taskEditDTO);
 
 	boolean existTask(Long id);
 	
