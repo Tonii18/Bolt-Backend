@@ -10,8 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskAdminDTO {
-	
+
+	Long id;
 	private String title;
 	private String description;
+	private String state;
 
 }

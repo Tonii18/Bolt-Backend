@@ -12,7 +12,6 @@ import com.example.demo.entity.Project;
 import com.example.demo.entity.Task;
 import com.example.demo.model.TaskAdminDTO;
 import com.example.demo.model.TaskDTO;
-import com.example.demo.model.TaskEditDTO;
 import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.services.TasksServices;
@@ -40,11 +39,6 @@ public class TaskServiceImpl implements TasksServices {
 		return modelMapper.map(taskDTO, Task.class);
 	}
 
-	private Task transformTask(TaskEditDTO taskEditDTO) {
-		ModelMapper modelMapper = new ModelMapper();
-		return modelMapper.map(taskEditDTO, Task.class);
-	}
-
 	@Override
 	public List<TaskDTO> showAllTasks() {
 		List<TaskDTO> taskDTOs = new java.util.ArrayList<>();
@@ -69,13 +63,13 @@ public class TaskServiceImpl implements TasksServices {
 	}
 
 	@Override
-	public Task updateTask(Long id, TaskEditDTO taskEditDTO) {
+	public Task updateTask(Long id, TaskAdminDTO taskDTO) {
 		Task existingTask = taskRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("The task not exist for update"));
 
-		existingTask.setName(taskEditDTO.getTitle());
-		existingTask.setDescription(taskEditDTO.getDescription());
-		existingTask.setState(taskEditDTO.getState());
+		existingTask.setName(taskDTO.getTitle());
+		existingTask.setDescription(taskDTO.getDescription());
+		existingTask.setState(taskDTO.getState());
 
 		return taskRepository.save(existingTask);
 	}
@@ -94,7 +88,7 @@ public class TaskServiceImpl implements TasksServices {
 		List<TaskAdminDTO> tasksTransformed = new ArrayList<>();
 
 		for (Task t : tasks) {
-			TaskAdminDTO dto = new TaskAdminDTO(t.getName(), t.getDescription());
+			TaskAdminDTO dto = new TaskAdminDTO(t.getId(), t.getName(), t.getDescription(), t.getState());
 			tasksTransformed.add(dto);
 		}
 

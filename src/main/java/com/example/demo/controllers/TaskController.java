@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.Task;
 import com.example.demo.model.TaskAdminDTO;
 import com.example.demo.model.TaskDTO;
-import com.example.demo.model.TaskEditDTO;
 import com.example.demo.services.TasksServices;
 
 @RestController
@@ -40,12 +39,12 @@ public class TaskController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskEditDTO taskEditDTO) {
+    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskAdminDTO taskDTO) {
         if (!tasksServices.existTask(id)) {
             return ResponseEntity.notFound().build();
         }
 
-        Task taskUpdate = tasksServices.updateTask(id, taskEditDTO);
+        Task taskUpdate = tasksServices.updateTask(id, taskDTO);
         return ResponseEntity.ok(taskUpdate);
     }
 
