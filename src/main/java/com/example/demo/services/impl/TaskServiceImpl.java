@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Project;
 import com.example.demo.entity.Task;
+import com.example.demo.entity.User;
 import com.example.demo.model.TaskAdminDTO;
 import com.example.demo.model.TaskDTO;
 import com.example.demo.repository.ProjectRepository;
 import com.example.demo.repository.TaskRepository;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.services.TasksServices;
 
 @Service("taskService")
@@ -26,6 +28,10 @@ public class TaskServiceImpl implements TasksServices {
 	@Autowired
 	@Qualifier("projectRepository")
 	private ProjectRepository projectRepository;
+	
+	@Autowired
+	@Qualifier("userRepository")
+	private UserRepository userRepository;
 
 	// Method to transform TaskDTO
 	private TaskDTO transformTaskDTO(Task task) {
@@ -50,7 +56,17 @@ public class TaskServiceImpl implements TasksServices {
 
 	@Override
 	public Task addTask(TaskDTO taskDTO) {
-		return taskRepository.save(transformTask(taskDTO));
+		User user = userRepository.findById(taskDTO.getUserId()).orElseThrow(() -> new RuntimeException("User not found with id: " + taskDTO.getUserId()));
+		Project project = projectRepository.findById(taskDTO.getProjectId()).orElseThrow(() -> new RuntimeException("Project not found with id: " + taskDTO.getProjectId()));
+		
+		Task task = new Task();
+	    task.setName(taskDTO.getName());
+	    task.setDescription(taskDTO.getDescription());
+	    task.setState(taskDTO.getState());
+	    task.setUser(user);
+	    task.setProject(project);
+	    
+		return taskRepository.save(task);
 	}
 
 	@Override
