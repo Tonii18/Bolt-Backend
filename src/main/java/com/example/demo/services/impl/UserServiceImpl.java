@@ -105,4 +105,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).isPresent();
     }
 
+	@Override
+	public Long getUserId() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		String email = authentication.getName();
+		
+		User user = userRepository.findByEmail(email).get();
+		
+		return user.getId();
+	}
+
 }
