@@ -29,5 +29,7 @@ public interface ProjectsServices {
 	List<User> getUsersByProject(Long projectId);
 
 	List<ProjectDTO> getProjectsByUser(Long userId);
+	
+	Long getProjectId(String name);
 
 }

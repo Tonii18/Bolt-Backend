@@ -134,4 +134,12 @@ public class ProjectServiceImpl implements ProjectsServices {
 		return projectDTOs;
 	}
 
+	@Override
+	public Long getProjectId(String name) {
+		Project project = projectRepository.findByName(name);
+		Long projectId = project.getId();
+		
+		return projectId;
+	}
+
 }

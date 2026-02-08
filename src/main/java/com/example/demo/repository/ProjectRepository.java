@@ -11,4 +11,6 @@ import com.example.demo.entity.Project;
 @Repository("projectRepository")
 public interface ProjectRepository extends JpaRepository<Project, Serializable> {
     List<Project> findByUsersId(Long userId);
+    
+    Project findByName(String name);
 }

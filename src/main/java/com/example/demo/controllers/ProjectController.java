@@ -19,10 +19,8 @@ import com.example.demo.entity.Project;
 import com.example.demo.model.ProjectCreateDTO;
 import com.example.demo.model.ProjectDTO;
 import com.example.demo.model.ProjectEditDTO;
-import com.example.demo.model.UserDTO;
 import com.example.demo.model.UserProjectDTO;
 import com.example.demo.services.ProjectsServices;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/projects")
@@ -66,6 +64,13 @@ public class ProjectController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    
+    @GetMapping("/projects/getId/{name}")
+    public ResponseEntity<Long> getProjectId(@PathVariable String name) {
+    	Long projectId = projectsService.getProjectId(name);
+    	
+    	return ResponseEntity.ok(projectId);
     }
 
     /*
