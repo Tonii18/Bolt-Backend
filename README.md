@@ -82,5 +82,7 @@ _Requiere Header: `Authorization: Bearer <token>`_
    - `204`: Eliminación exitosa (sin contenido).
    - `401`: Token no válido o credenciales erróneas.
    - `404`: El recurso (ID) no existe.
-
+3. **Usuarios para el uso de la app:** - `Administrador/Usuario`
+   - `Administrador`: Correo -> `admin@admin.com` | Contraseña -> `12345678`.
+   - `Usuarios`: Correo -> `jesus@gmail.com` / `antonio@gmail.com` | Contraseña -> para los dos es la misma `12345678`.
 ---
